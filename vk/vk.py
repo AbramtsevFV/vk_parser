@@ -33,7 +33,7 @@ def get_users_list(groups_list):
 
     res = []
     print(f'{"*" * 5} Получение id пользователей {"*" * 5}')
-    for group in tqdm(groups_list[:10]):
+    for group in tqdm(groups_list):
         offset = 0
         group_dict = {'group_name': group['name'],
                       'group_id': group['group_id'],
