@@ -6,8 +6,7 @@ import pickle
 
 import pandas as pd
 
-from creds.tokens import vk_token
-from libraries import vk, VK
+from libraries import vk
 import logging
 
 from vk.utils import parse_group, parse_user
@@ -15,7 +14,22 @@ from vk.utils import parse_group, parse_user
 logger = logging.getLogger('logger')
 
 
+def get_group_name(url: str) -> list:
+    """Функция возвращает имя и id группы"""
+    group_screen_name = url.split('/')[-1]
+    get_param = lambda x, y: x[y]
 
+    res = vk.get_group_information(group_id=group_screen_name)
+    if res.get('error', {}).get('error_code', False):
+        """Если screen_name не верное получаем пустой список"""
+        logger.warning(res)
+        return []
+    params = res['response'][0]
+    name = get_param(params, 'name')
+    group_id = get_param(params, 'id')
+
+    return [{'name': name,
+             'group_id': group_id}]
 
 
 def get_groups_list(search) -> list:
